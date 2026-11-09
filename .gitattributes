@@ -1,0 +1,2 @@
+# Preserve the downloaded bytes used by the FASTA manifest.
+data/raw/*.fasta -text

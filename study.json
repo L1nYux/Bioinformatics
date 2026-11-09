@@ -1,0 +1,9 @@
+{
+  "seed": 20261109,
+  "starts_per_protein": 3,
+  "lengths": [20, 40, 80],
+  "replacement_percent": [0, 10, 30],
+  "matrix": "BLOSUM62",
+  "open_gap": -10,
+  "extend_gap": -1
+}
