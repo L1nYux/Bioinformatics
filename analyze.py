@@ -10,15 +10,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from experiment import study_targets
+from experiment import study_targets, summarize
 from fragment import MODES, ROOT, make_aligner
 
 
 def audit(folder):
     config = json.loads((ROOT / "study.json").read_text())
     targets = study_targets()
-    queries = pd.read_csv(folder / "queries.csv")
+    queries = pd.read_csv(folder / "queries.csv", keep_default_na=False)
     results = pd.read_csv(folder / "results.csv")
+    if not queries.query_id.is_unique or queries.empty:
+        raise ValueError("Expected nonempty, unique query IDs")
     expected = {(qid, mode) for qid in queries.query_id for mode in MODES}
     if len(results) != len(expected) or set(zip(results.query_id, results["mode"])) != expected:
         raise ValueError("Expected one result per query and method")
@@ -26,7 +28,12 @@ def audit(folder):
     tie_rows = []
     for row in results.merge(queries, validate="many_to_one", on="query_id").itertuples():
         target = targets[row.accession]
-        if target[row.true_start:row.true_end] != row.original:
+        changes = [i for i, (a, b) in enumerate(zip(row.original, row.query, strict=True)) if a != b]
+        if (not 0 <= row.true_start < row.true_end <= len(target)
+                or target[row.true_start:row.true_end] != row.original
+                or len(row.query) != row.length or row.true_end-row.true_start != row.length
+                or changes != list(map(int, row.substitutions.split()))
+                or len(changes) != row.length * row.pct // 100):
             raise ValueError(f"Bad truth for {row.query_id}")
         alignments = aligners[row.mode].align(target, row.query)
         bounds = set()
@@ -44,14 +51,22 @@ def audit(folder):
                 error = (abs(interval[0]-row.true_start) + abs(interval[1]-row.true_end)) / 2
                 if ((row.start, row.end) != interval or len(pairs) != row.paired
                         or not np.isclose(len(pairs)/row.length, row.coverage)
-                        or (interval == (row.true_start,row.true_end)) != row.exact or error != row.error):
+                        or (interval == (row.true_start,row.true_end)) != row.exact or error != row.error
+                        or not np.isclose(row.score, alignment.score)):
                     raise ValueError(f"Metric mismatch for {row.query_id}, {row.mode}")
         if not bounds and not (pd.isna(row.start) and pd.isna(row.end) and row.paired == 0
-                               and row.coverage == 0 and not row.exact and pd.isna(row.error)):
+                               and row.coverage == 0 and not row.exact and pd.isna(row.error)
+                               and pd.isna(row.score)):
             raise ValueError(f"Incorrect missing hit for {row.query_id}")
         if len(bounds) > 1:
             tie_rows.append(dict(query_id=row.query_id, mode=row.mode, intervals=sorted(bounds),
                                  exact_first=row.exact, exact_available=(row.true_start,row.true_end) in bounds))
+    for name, expected_table in zip(("per_protein", "summary"), summarize(queries, results)):
+        try:
+            pd.testing.assert_frame_equal(pd.read_csv(folder / f"{name}.csv"), expected_table,
+                                          check_dtype=False, rtol=1e-10, atol=1e-12)
+        except AssertionError as exc:
+            raise ValueError(f"Stale or incorrect {name}.csv") from exc
     pd.DataFrame(tie_rows, columns=["query_id","mode","intervals","exact_first","exact_available"]
                  ).to_csv(folder / "ambiguous.csv", index=False)
 

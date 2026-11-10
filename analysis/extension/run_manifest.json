@@ -1,0 +1,64 @@
+{
+  "protocol": {
+    "protocol_version": 1,
+    "seeds": [
+      20261110,
+      20261111,
+      20261112,
+      20261113,
+      20261114
+    ],
+    "starts_per_protein_per_length": 3,
+    "lengths": [
+      20,
+      40,
+      80
+    ],
+    "replacement_percent": [
+      10,
+      30
+    ],
+    "terminal_groups": [
+      "interior",
+      "first",
+      "last",
+      "both"
+    ],
+    "max_alignments": 1000,
+    "bootstrap_seed": 20261110,
+    "bootstrap_resamples": 10000
+  },
+  "scoring": {
+    "seed": 20261109,
+    "starts_per_protein": 3,
+    "lengths": [
+      20,
+      40,
+      80
+    ],
+    "replacement_percent": [
+      0,
+      10,
+      30
+    ],
+    "matrix": "BLOSUM62",
+    "open_gap": -10,
+    "extend_gap": -1
+  },
+  "proteins": 10,
+  "queries": 3600,
+  "alignments": 10800,
+  "python": "3.13.5",
+  "biopython": "1.88",
+  "numpy": "2.5.4",
+  "pandas": "3.1.1",
+  "platform": "Windows",
+  "sha256": {
+    "extension.json": "e77620beb82b628d7fc030c4cb5a0609719138ad7e2f89c988f3b4179eb8aac3",
+    "study.json": "48b6758b1338b89c8adefd3cb9020604a6f404ca5aa95d49f5bceb214ba4aae8",
+    "data/study_manifest.csv": "bbb8e76f7662e331d75d28a408c42ef01c1836236da908e5a7af1aa2e3802b79",
+    "fragment.py": "ffc11f4efaa776b558cb04e3af3ada3a44c3dd5fbc669928d828ea79b31644fd",
+    "extension.py": "274171d7133f188cbc3be7fa9af7fc70dc141c8ad2a0b65e9ca48a2f7ef90063",
+    "experiment.py": "f6f5d4c30f72be2ef4a8c0b96240b67fa286a703d7c36b4a19ce17288e85c30b"
+  }
+}

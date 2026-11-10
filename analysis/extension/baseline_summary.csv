@@ -1,0 +1,4 @@
+mode,queries,first_correct,first_exact,accepted,acceptance_rate,accepted_wrong,accepted_error_rate,ambiguous,incomplete,no_hit,truth_in_observed_intervals
+global,270,206,0.762962962962963,238,0.8814814814814815,40,0.16806722689075632,32,0,0,225
+local,270,215,0.7962962962962963,270,1.0,55,0.2037037037037037,0,0,0,215
+semiglobal,270,268,0.9925925925925926,268,0.9925925925925926,0,0.0,2,0,0,270

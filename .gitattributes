@@ -1,2 +1,16 @@
 # Preserve the downloaded bytes used by the FASTA manifest.
 data/raw/*.fasta -text
+# Keep frozen CSV bytes and portable source hashes stable after checkout.
+*.csv -text
+*.fasta -text
+*.png -text
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.ini text eol=lf
+*.yml text eol=lf
+SHA256SUMS.txt text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+requirements-lock.txt -text
+LICENSE -text

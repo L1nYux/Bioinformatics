@@ -1,0 +1,37 @@
+[
+  {
+    "file": "results/ambiguous.csv",
+    "sha256": "2df5e716551ec4795aa54746809f2b61f1c8f73d79b216c041a10261abf38565",
+    "reproduced_identically": true
+  },
+  {
+    "file": "results/coverage_error.png",
+    "sha256": "7324b80206e08024c369a902c7d4b7894ac8cebbf12fbad82abc28d36e5babb2",
+    "reproduced_identically": true
+  },
+  {
+    "file": "results/exact.png",
+    "sha256": "4ba41583da5a49c7011e95e231bd8a97f7912e7748408aca01909074b293b5a7",
+    "reproduced_identically": true
+  },
+  {
+    "file": "results/per_protein.csv",
+    "sha256": "10b1e1af7e7640a32d6f460b12c090ddff42d1de0bfc4846d5fcf9cf9cc91279",
+    "reproduced_identically": true
+  },
+  {
+    "file": "results/queries.csv",
+    "sha256": "bfaf9efd4a6363fe27b704c24f42e0d5ecf5e2bd8901b39b2b79031a2da4af84",
+    "reproduced_identically": true
+  },
+  {
+    "file": "results/results.csv",
+    "sha256": "375288adf846292c80f268f67576de6aaf660e5448d5128bec8e47bf23046352",
+    "reproduced_identically": true
+  },
+  {
+    "file": "results/summary.csv",
+    "sha256": "e6504220ac28ffe7f6b1afaf767cab3c1eff9dedd1ffa60c0e75604145ffd71d",
+    "reproduced_identically": true
+  }
+]

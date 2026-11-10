@@ -1,0 +1,11 @@
+{
+  "protocol_version": 1,
+  "seeds": [20261110, 20261111, 20261112, 20261113, 20261114],
+  "starts_per_protein_per_length": 3,
+  "lengths": [20, 40, 80],
+  "replacement_percent": [10, 30],
+  "terminal_groups": ["interior", "first", "last", "both"],
+  "max_alignments": 1000,
+  "bootstrap_seed": 20261110,
+  "bootstrap_resamples": 10000
+}

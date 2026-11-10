@@ -48,6 +48,20 @@ def generate_queries(targets, config):
                                substitutions=" ".join(str(p) for p in positions))
 
 
+def summarize(queries, results):
+    joined = results.merge(queries, on="query_id", validate="many_to_one")
+    groups = ["length", "pct", "mode"]
+    per_protein = joined.groupby(["accession", *groups]).agg(
+        queries=("exact", "size"), hits=("start", "count"), exact=("exact", "mean"),
+        coverage=("coverage", "mean"), error=("error", "mean"),
+    ).reset_index()
+    summary = per_protein.groupby(groups).agg(
+        queries=("queries", "sum"), hits=("hits", "sum"), proteins=("accession", "size"),
+        exact=("exact", "mean"), coverage=("coverage", "mean"), error=("error", "mean"),
+    ).reset_index()
+    return per_protein, summary
+
+
 def run(output):
     config = json.loads((ROOT / "study.json").read_text())
     targets = study_targets()
@@ -62,16 +76,7 @@ def run(output):
             results.append(dict(query_id=q.query_id, mode=mode, **result,
                                 exact=(start, end) == (q.true_start, q.true_end), error=error))
     results = pd.DataFrame(results)
-    joined = results.merge(queries, on="query_id", validate="many_to_one")
-    groups = ["length", "pct", "mode"]
-    per_protein = joined.groupby(["accession", *groups]).agg(
-        queries=("exact", "size"), hits=("start", "count"), exact=("exact", "mean"),
-        coverage=("coverage", "mean"), error=("error", "mean"),
-    ).reset_index()
-    summary = per_protein.groupby(groups).agg(
-        queries=("queries", "sum"), hits=("hits", "sum"), proteins=("accession", "size"),
-        exact=("exact", "mean"), coverage=("coverage", "mean"), error=("error", "mean"),
-    ).reset_index()
+    per_protein, summary = summarize(queries, results)
     output.mkdir(parents=True, exist_ok=True)
     for name, table in [("queries", queries), ("results", results), ("per_protein", per_protein),
                         ("summary", summary)]:
